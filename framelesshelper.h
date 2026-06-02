@@ -2,7 +2,7 @@
 #include <QObject>
 #include <QQmlEngine>
 #include <QQuickWindow>
-#include "FramelessEventFilter.h"
+#include "framelesseventfilter.h"
 
 class FramelessHelper : public QObject
 {
@@ -34,6 +34,15 @@ public:
         m_filter = new FramelessEventFilter(window, captionHeight);
         qGuiApp->installNativeEventFilter(m_filter);
         m_filter->activate();
+
+        // Remove the filter before the window is destroyed
+        connect(window, &QObject::destroyed, this, [this]() {
+            if (m_filter) {
+                qGuiApp->removeNativeEventFilter(m_filter);
+                delete m_filter;
+                m_filter = nullptr;
+            }
+        });
     }
 
     Q_INVOKABLE void setCaptionHeight(int h)
