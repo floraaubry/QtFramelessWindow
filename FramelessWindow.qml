@@ -6,6 +6,7 @@ ApplicationWindow {
     id: root
 
     property Component titleBar: DefaultTitleBar {}
+    property Component appHeader: null
     readonly property bool maximized: visibility === Window.Maximized
 
     visible: false
@@ -15,11 +16,20 @@ ApplicationWindow {
         root.show()
     }
 
-    Loader {
-        id: _titleBarLoader
-        anchors { top: parent.top; left: parent.left; right: parent.right }
-        sourceComponent: root.titleBar
-        onHeightChanged: FramelessHelper.setCaptionHeight(height)
+    header: Column {
+        width: parent ? parent.width : 0
+
+        Loader {
+            id: _titleBarLoader
+            width: parent.width
+            sourceComponent: root.titleBar
+            onHeightChanged: FramelessHelper.setCaptionHeight(height)
+        }
+
+        Loader {
+            width: parent.width
+            sourceComponent: root.appHeader
+        }
     }
 
     component DefaultTitleBar: Rectangle {
