@@ -25,7 +25,7 @@ qt_add_qml_module(OdizinneFramelessWindow
     VERSION 1.0
     OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/Odizinne/FramelessWindow"
     QML_FILES
-        framelesswindow.qml
+        FramelessWindow.qml
     SOURCES
         framelesshelper.h
         framelesshelper.cpp
