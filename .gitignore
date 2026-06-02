@@ -1,0 +1,4 @@
+FramelessWindowExample/build/*
+FramelessWindowExample/.qtcreator/*
+build/*
+.qtcreator/*
