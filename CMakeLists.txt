@@ -28,7 +28,6 @@ qt_add_qml_module(OdizinneFramelessWindow
         FramelessWindow.qml
     SOURCES
         framelesshelper.h
-        framelesshelper.cpp
         framelesseventfilter.h
 )
 

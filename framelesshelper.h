@@ -35,14 +35,13 @@ public:
         qGuiApp->installNativeEventFilter(m_filter);
         m_filter->activate();
 
-        // Remove the filter before the window is destroyed
-        connect(window, &QObject::destroyed, this, [this]() {
-            if (m_filter) {
-                qGuiApp->removeNativeEventFilter(m_filter);
-                delete m_filter;
-                m_filter = nullptr;
-            }
-        });
+        // Remove the filter as soon as the window starts closing,
+        // before Qt tears down the HWND.
+        connect(window, &QWindow::visibilityChanged, this,
+            [this](QWindow::Visibility visibility) {
+                if (visibility == QWindow::Hidden)
+                    teardown();
+            });
     }
 
     Q_INVOKABLE void setCaptionHeight(int h)
@@ -53,5 +52,15 @@ public:
 
 private:
     explicit FramelessHelper(QObject *parent = nullptr) : QObject(parent) {}
+
+    void teardown()
+    {
+        if (!m_filter)
+            return;
+        qGuiApp->removeNativeEventFilter(m_filter);
+        delete m_filter;
+        m_filter = nullptr;
+    }
+
     FramelessEventFilter *m_filter = nullptr;
 };
